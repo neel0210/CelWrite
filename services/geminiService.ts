@@ -1,16 +1,28 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { EvaluationResult, Question } from "../types";
 import { SYSTEM_INSTRUCTION } from "../constants";
 
 export class GeminiService {
   private static getAI() {
-    return new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+    // Vite uses import.meta.env to access variables starting with VITE_
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
+    if (!apiKey) {
+      throw new Error("VITE_GEMINI_API_KEY is not defined. Check GitHub Secrets and Workflow.");
+    }
+
+    return new GoogleGenAI(apiKey);
   }
 
   static async evaluateResponse(question: Question, userResponse: string): Promise<EvaluationResult> {
     try {
-      const ai = this.getAI();
+      const genAI = this.getAI();
+      // Using gemini-1.5-flash for stable JSON performance
+      const model = genAI.getGenerativeModel({
+        model: "gemini-1.5-flash",
+        systemInstruction: SYSTEM_INSTRUCTION,
+      });
+
       const prompt = `
         TASK: ${question.type}
         TITLE: ${question.title}
@@ -25,11 +37,9 @@ export class GeminiService {
         Provide a robust and honest CELPIP evaluation in JSON format.
       `;
 
-      const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: prompt,
-        config: {
-          systemInstruction: SYSTEM_INSTRUCTION,
+      const result = await model.generateContent({
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        generationConfig: {
           responseMimeType: "application/json",
           temperature: 0.7,
           responseSchema: {
@@ -70,14 +80,13 @@ export class GeminiService {
         },
       });
 
-      const text = response.text;
-      if (!text) throw new Error("Empty response from AI");
+      const responseText = result.response.text();
+      if (!responseText) throw new Error("Empty response from AI");
       
-      const result = JSON.parse(text);
-      return result as EvaluationResult;
+      return JSON.parse(responseText) as EvaluationResult;
     } catch (error) {
       console.error("Evaluation failed:", error);
-      throw new Error("Assessment failed. Please check your API key and connection.");
+      throw new Error("Assessment failed. Please verify your API key configuration and network.");
     }
   }
 }
