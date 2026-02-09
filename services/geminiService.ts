@@ -4,11 +4,11 @@ import { SYSTEM_INSTRUCTION } from "../constants";
 
 export class GeminiService {
   private static getAI() {
-    // Vite uses import.meta.env to access variables starting with VITE_
+    // Vite bakes VITE_ prefixed variables into the code at build time
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
     if (!apiKey) {
-      throw new Error("VITE_GEMINI_API_KEY is not defined. Check GitHub Secrets and Workflow.");
+      throw new Error("API Key is missing. Ensure VITE_GEMINI_API_KEY is set in GitHub Secrets.");
     }
 
     return new GoogleGenAI(apiKey);
@@ -17,7 +17,7 @@ export class GeminiService {
   static async evaluateResponse(question: Question, userResponse: string): Promise<EvaluationResult> {
     try {
       const genAI = this.getAI();
-      // Using gemini-1.5-flash for stable JSON performance
+      // Using gemini-1.5-flash for better reliability with JSON schemas
       const model = genAI.getGenerativeModel({
         model: "gemini-1.5-flash",
         systemInstruction: SYSTEM_INSTRUCTION,
@@ -86,7 +86,7 @@ export class GeminiService {
       return JSON.parse(responseText) as EvaluationResult;
     } catch (error) {
       console.error("Evaluation failed:", error);
-      throw new Error("Assessment failed. Please verify your API key configuration and network.");
+      throw new Error("Assessment failed. Please check your API key and connection.");
     }
   }
 }
