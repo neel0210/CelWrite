@@ -1,0 +1,5 @@
+{
+  "name": "CelWrite - CELPIP Writing Simulator",
+  "description": "A high-fidelity CELPIP Writing Test simulator featuring real-world tasks, countdown timers, and AI-powered evaluation using Gemini.",
+  "requestFramePermissions": []
+}

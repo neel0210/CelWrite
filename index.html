@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CelWrite - CELPIP Exam Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        overflow-x: hidden;
+        background-color: #050505;
+        color: #f0f0f0;
+      }
+      .liquid-bg {
+        background: radial-gradient(circle at top right, #111, #050505);
+        background-attachment: fixed;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .glass-button {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(12px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .glass-button:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-1px);
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+      }
+      @keyframes float {
+        0% { transform: translate(0, 0) scale(1); }
+        50% { transform: translate(20px, -30px) scale(1.1); }
+        100% { transform: translate(0, 0) scale(1); }
+      }
+      .blob {
+        position: fixed;
+        filter: blur(100px);
+        z-index: -1;
+        opacity: 0.25;
+        animation: float 15s ease-in-out infinite;
+        pointer-events: none;
+      }
+      input, textarea, select {
+        background: rgba(0, 0, 0, 0.2) !important;
+        color: white !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      }
+      input:focus, textarea:focus, select:focus {
+        border-color: #6366f1 !important;
+        outline: none;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4",
+    "@google/genai": "https://esm.sh/@google/genai@^1.40.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="liquid-bg min-h-screen">
+    <div id="root"></div>
+    <!-- Dark themed decorative blobs -->
+    <div class="blob w-[500px] h-[500px] bg-indigo-900 top-[-15%] left-[-10%]"></div>
+    <div class="blob w-[450px] h-[450px] bg-purple-900 bottom-[-15%] right-[-10%]" style="animation-delay: -3s;"></div>
+    <div class="blob w-72 h-72 bg-blue-900 top-[30%] right-[15%]" style="animation-delay: -7s;"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
