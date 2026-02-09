@@ -1,9 +1,9 @@
-name: Deploy to GitHub Pages
+name: Deploy Vite App to GitHub Pages
 
 on:
   push:
     branches:
-      - main
+      - main  # change if your default branch is different
 
 permissions:
   contents: read
@@ -39,7 +39,7 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: dist  # Vite's default build output
 
   deploy:
     needs: build
