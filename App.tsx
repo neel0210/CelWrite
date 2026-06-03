@@ -35,7 +35,7 @@ const Footer = () => (
         &copy; {new Date().getFullYear()} CelWrite.
       </p>
       <p className="text-xs text-zinc-600 font-medium tracking-wide">
-        BY <span className="text-zinc-400">NEEL0210</span>, LEVERAGING AI.
+        BY <span className="text-zinc-400">NEEL0210</span>
       </p>
     </div>
   </footer>
